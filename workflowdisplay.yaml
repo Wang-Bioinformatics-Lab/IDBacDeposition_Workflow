@@ -1,4 +1,4 @@
-name: template_nextflow_workflow
+name: idbacdeposition_workflow
 displayname: STUFF
 Views:
 -   name: Summary List
