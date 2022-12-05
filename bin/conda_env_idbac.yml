@@ -4,6 +4,4 @@ channels:
 dependencies:
   - python=3.8.8
   - pandas
-  - pip:
-    - xmltodict
-    - requests
+  - openpyxl

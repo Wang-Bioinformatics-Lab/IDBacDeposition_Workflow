@@ -12,7 +12,7 @@ TOOL_FOLDER = "$baseDir/bin"
 process processData {
     publishDir "./nf_output", mode: 'copy'
 
-    conda "$TOOL_FOLDER/conda_env.yml"
+    conda "$TOOL_FOLDER/conda_env_idbac.yml"
 
     input:
     file input from Channel.fromPath(params.input_metadata)
