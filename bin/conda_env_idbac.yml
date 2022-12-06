@@ -5,3 +5,5 @@ dependencies:
   - python=3.8.8
   - pandas
   - openpyxl
+  - pip:
+    - massql

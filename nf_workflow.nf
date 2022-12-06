@@ -19,9 +19,10 @@ process processData {
     file spectra from Channel.fromPath(params.input_spectra_folder)
 
     output:
-    file 'output.tsv'
+    file 'output_spectra'
 
     """
-    python $TOOL_FOLDER/processing_spectra.py $input $spectra output.tsv
+    mkdir output_spectra
+    python $TOOL_FOLDER/processing_spectra.py $input $spectra output_spectra
     """
 }
