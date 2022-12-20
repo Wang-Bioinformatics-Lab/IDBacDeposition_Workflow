@@ -17,3 +17,15 @@ Views:
             <a target="_blank" href="/dashboards/lcms?usi=mzspec:GNPS2-${task}:${encodeURIComponent(row["filename"])}">View LCMS - mzspec:GNPS2-${task}:${row["filename"]}</a>
             `;}}]'
             
+-   name: Metadata Preview
+    displayname: Metadata Preview
+    viewname: metadatashow
+    displaytype: datatable
+    parameters:
+        filename: metadata_converted/converted_metadata.tsv
+        columns:
+            -   title: "Filename"
+                data: Filename
+            -   title: "Scan/Coordinate"
+                data: "Scan/Coordinate"
+    

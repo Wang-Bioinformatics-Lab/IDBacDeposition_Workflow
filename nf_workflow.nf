@@ -26,3 +26,17 @@ process processData {
     python $TOOL_FOLDER/processing_spectra.py $input $spectra output_spectra
     """
 }
+
+process showMetadata {
+    publishDir "./metadata_converted", mode: 'copy'
+
+    input:
+    file input from Channel.fromPath(params.input_metadata)
+
+    output:
+    file 'converted_metadata.tsv'
+
+    """
+    python $TOOL_FOLDER/convert_metadata.py $input converted_metadata.tsv
+    """
+}
