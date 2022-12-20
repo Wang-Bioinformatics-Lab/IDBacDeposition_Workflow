@@ -29,3 +29,9 @@ Views:
             -   title: "Scan/Coordinate"
                 data: "Scan/Coordinate"
     
+# -   name: Download Original Metadata
+#     displayname: Download Original Metadata
+#     viewname: downloadoriginalmetadata
+#     displaytype: download
+#     parameters:
+#         filename: input_metadata/
