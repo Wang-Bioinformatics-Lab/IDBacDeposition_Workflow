@@ -8,8 +8,8 @@ import requests
 import yaml
 from dotenv import dotenv_values, load_dotenv
 
-#SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
-SERVER_URL = "https://idbac-kb.gnps2.org/"
+SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
+#SERVER_URL = "https://idbac-kb.gnps2.org/"
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -41,11 +41,11 @@ def main():
             parameters["CREDENTIALSKEY"] = config["CREDENTIALSKEY"]
             parameters["spectrum_json"] = json.dumps(spectrum_obj)
 
-            #print(parameters)
-
             r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
             #print(r.text)
             r.raise_for_status()
+
+            #TODO: We should define a collection
 
 
 if __name__ == "__main__":
