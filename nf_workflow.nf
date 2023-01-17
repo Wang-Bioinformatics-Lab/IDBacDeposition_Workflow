@@ -19,11 +19,27 @@ process processData {
     file spectra from Channel.fromPath(params.input_spectra_folder)
 
     output:
-    file 'output_spectra'
+    file 'output_spectra' into _spectra_json_ch
 
     """
     mkdir output_spectra
     python $TOOL_FOLDER/processing_spectra.py $input $spectra output_spectra
+    """
+}
+
+process depositSpectrum {
+    publishDir "./nf_output", mode: 'copy'
+
+    conda "$TOOL_FOLDER/conda_env_idbac.yml"
+
+    input:
+    file input from _spectra_json_ch
+
+    //output:
+    //file 'up'
+
+    """
+    python $TOOL_FOLDER/deposit_spectra.py $input
     """
 }
 
@@ -40,3 +56,4 @@ process showMetadata {
     python $TOOL_FOLDER/convert_metadata.py $input converted_metadata.tsv
     """
 }
+
