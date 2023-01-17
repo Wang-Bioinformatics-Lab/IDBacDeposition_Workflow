@@ -24,19 +24,30 @@ def main():
     all_json_files = glob.glob(os.path.join(args.input_json_folder, "*.json"))
 
     for json_filename in all_json_files:
+        print(json_filename)
+
         spectra_list = json.load(open(json_filename))
 
         for spectrum_obj in spectra_list:
-            parameters = spectrum_obj
+            parameters = {}
 
             workflow_params = yaml.safe_load(open(args.params))
+
+            if not "peaks" in spectrum_obj:
+                continue
 
             parameters["task"] = workflow_params["task"]
             parameters["user"] = workflow_params["OMETAUSER"]
             parameters["CREDENTIALSKEY"] = config["CREDENTIALSKEY"]
+            parameters["spectrum_json"] = json.dumps(spectrum_obj)
 
-            r = requests.post("{}/api/deposit".format(SERVER_URL), json=parameters)
+            #print(parameters)
+
+            r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
+            #print(r.text)
             r.raise_for_status()
+
+            break
 
 
 if __name__ == "__main__":
