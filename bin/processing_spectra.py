@@ -5,6 +5,12 @@ import pandas as pd
 import uuid
 import json
 from massql import msql_fileloading
+import pymzml
+
+
+def load_data(filename):
+    # TODO: read the mzML directly
+    return "MING"
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -26,6 +32,7 @@ def main():
         if not os.path.exists(filename):
             continue
 
+        
         ms1_df, ms2_df = msql_fileloading.load_data(filename)
 
         scan_or_coord = record["Scan/Coordinate"]
