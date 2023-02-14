@@ -11,3 +11,4 @@ dependencies:
     - python-dotenv
     - PyYAML
     - pymzml
+    - pyteomics

@@ -5,12 +5,56 @@ import pandas as pd
 import uuid
 import json
 from massql import msql_fileloading
-import pymzml
+from pyteomics import mzxml, mzml
+from tqdm import tqdm
 
+def load_data(input_filename):
+    try:
+        ms1_df, ms2_df = msql_fileloading.load_data(filename)
 
-def load_data(filename):
+        return ms1_df, ms2_df
+    except:
+        print("Error loading data")
+
+    MS_precisions = {
+        1: 5e-6,
+        2: 20e-6,
+        3: 20e-6,
+        4: 20e-6,
+        5: 20e-6,
+        6: 20e-6,
+        7: 20e-6,
+    }
+    
+    ms1_df = pd.DataFrame()
+    ms2_df = pd.DataFrame()
+
+    all_mz = []
+    all_i = []
+    all_scan = []
+    
     # TODO: read the mzML directly
-    return "MING"
+    with mzml.read(input_filename) as reader:
+        for spectrum in tqdm(reader):
+            try:
+                scan = int(spectrum["id"].replace("scanId=", "").split("scan=")[-1])
+            except:
+                scan = spectrum["id"]
+
+            mz = spectrum["m/z array"]
+            intensity = spectrum["intensity array"]
+
+            all_mz += list(mz)
+            all_i += list(intensity)
+            all_scan += len(mz) * [scan]
+
+            print(spectrum["id"])
+            
+    if len(all_mz) > 0:
+        ms1_df['i'] = all_i
+        ms1_df['mz'] = all_mz
+
+    return ms1_df, ms2_df
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
@@ -32,21 +76,25 @@ def main():
         if not os.path.exists(filename):
             continue
 
-        
-        ms1_df, ms2_df = msql_fileloading.load_data(filename)
+        ms1_df, ms2_df = load_data(filename)
 
         scan_or_coord = record["Scan/Coordinate"]
 
         if scan_or_coord == "*":
             # We'll just grab the first one
             # TODO: Actually do the right thing here
+            
             print("Grabbing first scan")
             first_scan = ms1_df["scan"].iloc[0]
             peaks_df = ms1_df[ms1_df["scan"] == first_scan]
             peaks_list = peaks_df.to_dict('records')
             peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
         else:
-            raise Exception("Need to implement getting scan")
+            print(record)
+
+            peaks_df = ms1_df[ms1_df["scan"] == scan_or_coord]
+            peaks_list = peaks_df.to_dict('records')
+            peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
 
         record["peaks"] = peaks_list
 
