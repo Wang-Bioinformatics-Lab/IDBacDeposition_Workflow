@@ -14,7 +14,7 @@ def load_data(input_filename):
 
         return ms1_df, ms2_df
     except:
-        print("Error loading data")
+        print("Error loading data, falling back on default")
 
     MS_precisions = {
         1: 5e-6,
@@ -23,7 +23,7 @@ def load_data(input_filename):
         4: 20e-6,
         5: 20e-6,
         6: 20e-6,
-        7: 20e-6,
+        7: 20e-6
     }
     
     ms1_df = pd.DataFrame()
@@ -37,7 +37,7 @@ def load_data(input_filename):
     with mzml.read(input_filename) as reader:
         for spectrum in tqdm(reader):
             try:
-                scan = int(spectrum["id"].replace("scanId=", "").split("scan=")[-1])
+                scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]
             except:
                 scan = spectrum["id"]
 
@@ -77,6 +77,10 @@ def main():
             continue
 
         ms1_df, ms2_df = load_data(filename)
+
+        if len(ms1_df) == 0:
+            #print("Peaks Empty, skipping", filename)
+            continue
 
         scan_or_coord = record["Scan/Coordinate"]
 
