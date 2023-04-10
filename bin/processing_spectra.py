@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 def load_data(input_filename):
     try:
-        ms1_df, ms2_df = msql_fileloading.load_data(filename)
+        ms1_df, ms2_df = msql_fileloading.load_data(input_filename)
 
         return ms1_df, ms2_df
     except:
@@ -53,6 +53,7 @@ def load_data(input_filename):
     if len(all_mz) > 0:
         ms1_df['i'] = all_i
         ms1_df['mz'] = all_mz
+        ms1_df['scan'] = all_scan
 
     return ms1_df, ms2_df
 

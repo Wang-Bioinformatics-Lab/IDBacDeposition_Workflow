@@ -35,10 +35,11 @@ process depositSpectrum {
 
     input:
     file input from _spectra_json_ch
-    file params from Channel.fromPath(params.OMETAPARAM_YAML)
+    file params_file from Channel.fromPath(params.OMETAPARAM_YAML)
 
     """
-    python $TOOL_FOLDER/deposit_spectra.py $input --params $params \
+    python $TOOL_FOLDER/deposit_spectra.py $input \
+    --params $params_file \
     --dryrun $params.dryrun
     """
 }

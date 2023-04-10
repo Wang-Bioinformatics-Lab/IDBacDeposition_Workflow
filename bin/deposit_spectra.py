@@ -8,8 +8,8 @@ import requests
 import yaml
 from dotenv import dotenv_values, load_dotenv
 
-SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
-#SERVER_URL = "https://idbac-kb.gnps2.org/"
+#SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
+SERVER_URL = "https://idbac-kb.gnps2.org/"
 
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
