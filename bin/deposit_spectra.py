@@ -15,6 +15,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('input_json_folder')
     parser.add_argument('--params')
+    parser.add_argument('--dryrun', default="Yes")
 
     args = parser.parse_args()
 
@@ -41,9 +42,10 @@ def main():
             parameters["CREDENTIALSKEY"] = config["CREDENTIALSKEY"]
             parameters["spectrum_json"] = json.dumps(spectrum_obj)
 
-            r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
-            #print(r.text)
-            r.raise_for_status()
+            if args.dryrun == "No":
+                r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
+                #print(r.text)
+                r.raise_for_status()
 
             #TODO: We should define a collection
 

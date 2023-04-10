@@ -2,6 +2,7 @@
 
 params.input_metadata = ""
 params.input_spectra_folder = ""
+params.dryrun = "Yes"
 
 // Workflow Boiler Plate
 params.OMETALINKING_YAML = "flow_filelinking.yaml"
@@ -37,7 +38,8 @@ process depositSpectrum {
     file params from Channel.fromPath(params.OMETAPARAM_YAML)
 
     """
-    python $TOOL_FOLDER/deposit_spectra.py $input --params $params
+    python $TOOL_FOLDER/deposit_spectra.py $input --params $params \
+    --dryrun $params.dryrun
     """
 }
 

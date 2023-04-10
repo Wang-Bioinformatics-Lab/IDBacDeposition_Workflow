@@ -29,3 +29,13 @@ parameterlist:
       optional: false
       selectsinglefile: false
       folderunroll: true
+
+    - displayname: Dryrun Mode
+      paramtype: select
+      nf_paramname: dryrun
+      formvalue: "Yes"
+      options:
+        - value: "Yes"
+          display: "Yes"
+        - value: "No"
+          display: "No"
