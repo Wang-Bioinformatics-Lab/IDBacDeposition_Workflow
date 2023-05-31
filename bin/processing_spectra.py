@@ -80,36 +80,47 @@ def main():
         ms1_df, ms2_df = load_data(filename)
 
         if len(ms1_df) == 0:
-            #print("Peaks Empty, skipping", filename)
+            print("Peaks Empty, skipping", filename)
             continue
 
         scan_or_coord = record["Scan/Coordinate"]
 
+        spectra_list = []
+
         if scan_or_coord == "*":
-            # We'll just grab the first one
-            # TODO: Actually do the right thing here
+            print("Grabbing all scans")
             
-            print("Grabbing first scan")
-            first_scan = ms1_df["scan"].iloc[0]
-            peaks_df = ms1_df[ms1_df["scan"] == first_scan]
-            peaks_list = peaks_df.to_dict('records')
-            peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
+            # Splitting by scan
+            print(ms1_df)
+            scan_groups = ms1_df.groupby("scan")
+            for scan, scan_df in scan_groups:
+                peaks_list = scan_df.to_dict('records')
+                peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
+
+                print(scan, len(peaks_list))
+
+                spectra_list.append(peaks_list)
         else:
-            print(record)
+            print("Grabbing {} scans".format(scan_or_coord))
 
             peaks_df = ms1_df[ms1_df["scan"] == scan_or_coord]
             peaks_list = peaks_df.to_dict('records')
             peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
 
-        record["peaks"] = peaks_list
+            spectra_list.append(peaks_list)
+
+        record["spectrum"] = spectra_list
 
     # Outputting the JSON
     output_json = os.path.join(args.output_folder, args.output_identifier + ".json")
-    open(output_json, "w").write(json.dumps(all_rows))
+    open(output_json, "w").write(json.dumps(all_rows, indent=4))
 
     # Outputting the Summary 
     summary_df = pd.DataFrame(all_rows)
-    summary_df = summary_df.drop(['peaks'], axis=1)
+    try:
+        summary_df = summary_df.drop(['spectrum'], axis=1)
+    except:
+        pass
 
     output_extraction_tsv = os.path.join(args.output_folder, args.output_identifier + ".tsv")
     summary_df.to_csv(output_extraction_tsv, sep="\t", index=False)

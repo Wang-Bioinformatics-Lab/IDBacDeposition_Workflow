@@ -34,7 +34,7 @@ def main():
 
             workflow_params = yaml.safe_load(open(args.params))
 
-            if not "peaks" in spectrum_obj:
+            if not "spectrum" in spectrum_obj:
                 continue
 
             parameters["task"] = workflow_params["task"]
@@ -44,7 +44,6 @@ def main():
 
             if args.dryrun == "No":
                 r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
-                #print(r.text)
                 r.raise_for_status()
 
             #TODO: We should define a collection
