@@ -24,11 +24,19 @@ Views:
     parameters:
         filename: metadata_converted/converted_metadata.tsv
         columns:
+            -   title: "View"
+                data: None
             -   title: "Filename"
                 data: Filename
             -   title: "Scan/Coordinate"
                 data: "Scan/Coordinate"
-    
+        columnDefs: '[ {"targets": 0,"data": null,"render": function ( data, type, row, meta ) {
+        return `
+            <a target="_blank" href="https://metabolomics-usi.gnps2.org/dashinterface/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1">View Consensus - Resolver</a>
+            <br>
+            <a target="_blank" href="/dashboards/embedded/resolver/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1">View Consensus - Local</a>
+        `;}}]'
+
 # -   name: Download Original Metadata
 #     displayname: Download Original Metadata
 #     viewname: downloadoriginalmetadata
