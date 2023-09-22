@@ -78,7 +78,12 @@ def main():
             print("Error, missing column", column)
             sys.exit(1)
 
+
     for record in all_rows:
+        # checking if file is NaN
+        if pd.isnull(record["Filename"]):
+            continue
+
         filename = os.path.join(args.input_spectra_folder, record["Filename"])
 
         if not os.path.exists(filename):
@@ -98,13 +103,12 @@ def main():
             print("Grabbing all scans")
             
             # Splitting by scan
-            print(ms1_df)
             scan_groups = ms1_df.groupby("scan")
             for scan, scan_df in scan_groups:
                 peaks_list = scan_df.to_dict('records')
                 peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
 
-                print(scan, len(peaks_list))
+                print("SCAN and length of peaks", scan, len(peaks_list))
 
                 spectra_list.append(peaks_list)
         else:
