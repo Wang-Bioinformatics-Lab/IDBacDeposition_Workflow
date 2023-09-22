@@ -71,6 +71,13 @@ def main():
     metadata_df = pd.read_excel(args.input_metadata)
 
     all_rows = metadata_df.to_dict('records')
+
+    columns_needed = ["Filename", "Scan/Coordinate"]
+    for column in columns_needed:
+        if not column in metadata_df.columns:
+            print("Error, missing column", column)
+            sys.exit(1)
+
     for record in all_rows:
         filename = os.path.join(args.input_spectra_folder, record["Filename"])
 
