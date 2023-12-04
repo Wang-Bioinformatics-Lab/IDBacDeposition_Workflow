@@ -78,6 +78,8 @@ def main():
             print("Error, missing column", column)
             sys.exit(1)
 
+    # TODO: We should limit the column names
+    columns_possible = ["Filename", "Scan/Coordinate", "Strain name"]
 
     for record in all_rows:
         # checking if file is NaN
