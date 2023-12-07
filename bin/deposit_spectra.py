@@ -48,6 +48,11 @@ def main():
 
             #TODO: We should define a collection
 
+    # Once we've updated everything, we should tell the KB to update
+    if args.dryrun == "No":
+        r = requests.get("{}/api/database/refresh".format(SERVER_URL))
+        r.raise_for_status()
+
 
 if __name__ == "__main__":
     main()
