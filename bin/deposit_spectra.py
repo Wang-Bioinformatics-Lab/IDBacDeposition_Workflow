@@ -11,6 +11,35 @@ from dotenv import dotenv_values, load_dotenv
 #SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
 SERVER_URL = "https://idbac-kb.gnps2.org/"
 
+def _validate_entry(spectrum_obj):
+    all_fields = ["spectrum", "Strain name", "Strain ID", "Filename", 
+                    "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy", 
+                    "Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep", 
+                    "Cultivation media", "Cultivation temp", "Cultivation time", "PI",
+                    "MS Collected by", "Isolate Collected by", "Sample Collected by",
+                    "Sample name", "Isolate Source", "Source Location Name", "Longitude",
+                    "Latitude", "Altitude", "Collection Temperature"]
+    
+    required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep", "Cultivation media", "Cultivation temp", "Cultivation time", "PI"]
+
+
+    new_spectrum_obj = {}
+
+    for key in spectrum_obj:
+        if key in all_fields:
+            new_spectrum_obj[key] = spectrum_obj[key]
+        else:
+            print("Invalid Field", key)
+            continue
+
+    for key in required_fields:
+        if not key in new_spectrum_obj:
+            print("Missing Required Field", key)
+            raise Exception("Missing Required Field")
+
+    return new_spectrum_obj
+
+
 def main():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('input_json_folder')
@@ -35,6 +64,11 @@ def main():
             workflow_params = yaml.safe_load(open(args.params))
 
             if not "spectrum" in spectrum_obj:
+                continue
+
+            try:
+                spectrum_obj = _validate_entry(spectrum_obj)
+            except:
                 continue
 
             parameters["task"] = workflow_params["task"]
