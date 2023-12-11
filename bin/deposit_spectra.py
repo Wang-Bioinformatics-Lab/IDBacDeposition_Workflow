@@ -12,7 +12,7 @@ from dotenv import dotenv_values, load_dotenv
 SERVER_URL = "https://idbac-kb.gnps2.org/"
 
 def _validate_entry(spectrum_obj):
-    all_fields = ["spectrum", "Strain name", "Strain ID", "Filename", 
+    valid_fields = ["spectrum", "Strain name", "Strain ID", "Filename", 
                     "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy", 
                     "Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep", 
                     "Cultivation media", "Cultivation temp", "Cultivation time", "PI",
@@ -20,13 +20,14 @@ def _validate_entry(spectrum_obj):
                     "Sample name", "Isolate Source", "Source Location Name", "Longitude",
                     "Latitude", "Altitude", "Collection Temperature"]
     
-    required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep", "Cultivation media", "Cultivation temp", "Cultivation time", "PI"]
+    required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep", 
+                    "Cultivation media", "Cultivation temp", "Cultivation time", "PI"]
 
 
     new_spectrum_obj = {}
 
     for key in spectrum_obj:
-        if key in all_fields:
+        if key in valid_fields:
             new_spectrum_obj[key] = spectrum_obj[key]
         else:
             print("Invalid Field", key)
@@ -41,7 +42,7 @@ def _validate_entry(spectrum_obj):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser(description='Depositing the spectra one at a time.')
     parser.add_argument('input_json_folder')
     parser.add_argument('--params')
     parser.add_argument('--dryrun', default="Yes")
@@ -77,6 +78,7 @@ def main():
             parameters["spectrum_json"] = json.dumps(spectrum_obj)
 
             if args.dryrun == "No":
+                print("Submitting Spectrum")
                 r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
                 r.raise_for_status()
 
