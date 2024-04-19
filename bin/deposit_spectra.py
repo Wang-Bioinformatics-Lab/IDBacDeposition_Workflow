@@ -14,7 +14,7 @@ SERVER_URL = "https://idbac.org/"
 def _validate_entry(spectrum_obj):
     valid_fields = ["spectrum", "Strain name", "Strain ID", "Filename", 
                     "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy", 
-                    "Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep", 
+                    "16S Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep", 
                     "Cultivation media", "Cultivation temp", "Cultivation time", "PI",
                     "MS Collected by", "Isolate Collected by", "Sample Collected by",
                     "Sample name", "Isolate Source", "Source Location Name", "Longitude",
