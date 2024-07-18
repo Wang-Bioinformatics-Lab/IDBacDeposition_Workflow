@@ -12,15 +12,15 @@ from dotenv import dotenv_values, load_dotenv
 SERVER_URL = "https://idbac.org/"
 
 def _validate_entry(spectrum_obj):
-    valid_fields = ["spectrum", "Strain name", "Strain ID", "Filename", 
-                    "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy", 
-                    "16S Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep", 
+    valid_fields = ["spectrum", "Strain name", "Strain ID", "Filename",
+                    "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy",
+                    "16S Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep",
                     "Cultivation media", "Cultivation temp", "Cultivation time", "PI",
                     "MS Collected by", "Isolate Collected by", "Sample Collected by",
                     "Sample name", "Isolate Source", "Source Location Name", "Longitude",
                     "Latitude", "Altitude", "Collection Temperature", "Comment"]
     
-    required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep", 
+    required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep",
                     "Cultivation media", "Cultivation temp", "Cultivation time", "PI"]
 
 
@@ -58,6 +58,8 @@ def main():
         print(json_filename)
 
         spectra_list = json.load(open(json_filename))
+        # Strip whitespace from the keys
+        spectra_list = [{k.strip(): v for k, v in d.items()} for d in spectra_list]
 
         for spectrum_obj in spectra_list:
             parameters = {}
