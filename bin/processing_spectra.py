@@ -69,6 +69,14 @@ def main():
     print(args)
 
     metadata_df = pd.read_excel(args.input_metadata)
+    metadata_df.columns = metadata_df.columns.str.strip()
+
+    # Make sure scan/coordinate is present
+    if not "Scan/Coordinate" in metadata_df.columns:
+        raise ValueError("Scan/Coordinate column not found in metadata")
+    # Ensure none are empty
+    if metadata_df["Scan/Coordinate"].isnull().values.any():
+        raise ValueError("Scan/Coordinate column has empty values")
 
     all_rows = metadata_df.to_dict('records')
 
