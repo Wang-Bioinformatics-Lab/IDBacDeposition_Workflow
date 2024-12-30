@@ -37,7 +37,7 @@ process processInputDataAndMetadata {
 
 process getExistingNames {
     output:
-    file 'existing_names.txt', emit: existing_names
+    path 'existing_names.txt', emit: existing_names
 
     """
     MAX_RETRIES=3
@@ -48,23 +48,23 @@ process getExistingNames {
     # Retry logic
     for ((i=1; i<=MAX_RETRIES; i++))
     do
-        echo "Attempt $i of $MAX_RETRIES..."
+        echo "Attempt \$i of \$MAX_RETRIES..."
         
         # Run wget with timeout
-        wget --timeout=$TIMEOUT $URL -O $OUTPUT_FILE
+        wget --timeout=\$TIMEOUT \$URL -O \$OUTPUT_FILE
         
         # Check if the wget command was successful
-        if [ $? -eq 0 ]; then
+        if [ \$(echo \$?) -eq 0 ]; then
             echo "Download successful."
             break
         else
-            echo "Download failed. Retrying in $TIMEOUT seconds..."
-            sleep $TIMEOUT
+            echo "Download failed. Retrying in \$TIMEOUT seconds..."
+            sleep \$TIMEOUT
         fi
         
         # If the last attempt fails, print an error message
-        if [ $i -eq $MAX_RETRIES ]; then
-            echo "Failed to download after $MAX_RETRIES attempts."
+        if [ \$i -eq \$MAX_RETRIES ]; then
+            echo "Failed to download after \$MAX_RETRIES attempts."
         fi
     done
     """
@@ -154,9 +154,11 @@ workflow {
     // Processing data
     _spectra_json_ch = processInputDataAndMetadata(input_metadata_ch, input_spectra_ch)
 
+    getExistingNames()
+
     // Doing Deposition
     input_params_ch = Channel.fromPath(params.OMETAPARAM_YAML)
-    depositSpectrum(_spectra_json_ch, input_params_ch, depositSpectrum.out.existing_names)
+    depositSpectrum(_spectra_json_ch, input_params_ch, getExistingNames.out.existing_names)
 
     // Now we will process the data like we did in analysis workflow by doing baseline normalization
 
