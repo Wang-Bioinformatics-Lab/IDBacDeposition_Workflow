@@ -69,12 +69,18 @@ def main():
         # Strip whitespace from the keys
         spectra_list = [{k.strip(): v for k, v in d.items()} for d in spectra_list]
 
+        all_strain_names = []
         for spectrum_obj in spectra_list:
             if not "spectrum" in spectrum_obj:
                 continue
     
             # Validate them ahead of time
             _validate_entry(spectrum_obj, existing_names)
+            all_strain_names.append(spectrum_obj["Strain name"])
+
+        # Check that strain names are unique
+        if len(all_strain_names) != len(set(all_strain_names)):
+            raise Exception("Strain names are not unique") from None
 
         for spectrum_obj in spectra_list:
             parameters = {}
