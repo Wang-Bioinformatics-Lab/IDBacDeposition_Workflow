@@ -1,17 +1,16 @@
-import sys
 import os
 import argparse
+from pathlib import Path
 import glob
-import pandas as pd
 import json
 import requests
 import yaml
-from dotenv import dotenv_values, load_dotenv
+from dotenv import dotenv_values
 
 #SERVER_URL = "http://169.235.26.140:5392/" # This is Debug Server
 SERVER_URL = "https://idbac.org/"
 
-def _validate_entry(spectrum_obj):
+def _validate_entry(spectrum_obj, existing_names):
     valid_fields = ["spectrum", "Strain name", "Strain ID", "Filename",
                     "Scan/Coordinate", "Genbank accession", "NCBI taxid", "16S Taxonomy",
                     "16S Sequence", "Culture Collection", "MALDI matrix name", "MALDI prep",
@@ -37,6 +36,10 @@ def _validate_entry(spectrum_obj):
         if not key in new_spectrum_obj:
             print("Missing Required Field", key)
             raise Exception("Missing Required Field")
+        
+    if "Strain name" in new_spectrum_obj and new_spectrum_obj["Strain name"] in existing_names:
+        print("Strain Name already exists in the database")
+        raise Exception("Strain Name already exists in the database")
 
     return new_spectrum_obj
 
@@ -46,8 +49,13 @@ def main():
     parser.add_argument('input_json_folder')
     parser.add_argument('--params')
     parser.add_argument('--dryrun', default="Yes")
+    parser.add_argument('--existing_names', required=True)
 
     args = parser.parse_args()
+
+    existing_names_file = Path(str(args.existing_names))
+
+    existing_names = json.load(open(existing_names_file, 'r'))
 
     config = dotenv_values()
 
@@ -62,16 +70,18 @@ def main():
         spectra_list = [{k.strip(): v for k, v in d.items()} for d in spectra_list]
 
         for spectrum_obj in spectra_list:
+            if not "spectrum" in spectrum_obj:
+                continue
+    
+            # Validate them ahead of time
+            _validate_entry(spectrum_obj, existing_names)
+
+        for spectrum_obj in spectra_list:
             parameters = {}
 
             workflow_params = yaml.safe_load(open(args.params))
 
             if not "spectrum" in spectrum_obj:
-                continue
-
-            try:
-                spectrum_obj = _validate_entry(spectrum_obj)
-            except:
                 continue
 
             parameters["task"] = workflow_params["task"]
@@ -83,8 +93,6 @@ def main():
                 print("Submitting Spectrum")
                 r = requests.post("{}/api/spectrum".format(SERVER_URL), data=parameters)
                 r.raise_for_status()
-
-            #TODO: We should define a collection
 
     # Once we've updated everything, we should tell the KB to update
     if args.dryrun == "No":
