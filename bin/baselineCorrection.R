@@ -10,7 +10,10 @@ process_mzML_file <- function(input_file, output_file) {
   spectra_baseline_corrected <- removeBaseline(spectra, method="SNIP", iterations=100)
 
   # Perform peak detection
-  peaks <- detectPeaks(spectra_baseline_corrected)
+  peaks <- detectPeaks(spectra_baseline_corrected,
+                         halfWindowSize=10,
+                         method="SuperSmoother",
+                         SNR=4)
 
   # Export the processed spectra as an mzML file
   exportMzMl(peaks, output_file)
