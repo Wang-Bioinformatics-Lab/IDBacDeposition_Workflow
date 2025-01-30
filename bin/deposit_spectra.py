@@ -37,9 +37,9 @@ def _validate_entry(spectrum_obj, existing_names):
             print("Missing Required Field", key)
             raise Exception(f"Missing Required Field, {key}") from None
         
-    if "Strain name" in new_spectrum_obj and new_spectrum_obj["Strain name"] in existing_names:
-        print("Strain Name already exists in the database")
-        raise Exception("Strain Name already exists in the database") from None
+    # if "Strain name" in new_spectrum_obj and new_spectrum_obj["Strain name"] in existing_names:
+    #     print("Strain Name already exists in the database")
+    #     raise Exception("Strain Name already exists in the database") from None
 
     return new_spectrum_obj
 
