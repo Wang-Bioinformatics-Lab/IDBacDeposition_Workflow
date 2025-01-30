@@ -9,7 +9,7 @@ process_mzML_file <- function(input_file, output_file) {
   spectra <- transformIntensity(spectra, method="sqrt")
 
   spectra <- MALDIquant::smoothIntensity(spectra,
-                                         method = SavitzkyGolay,
+                                         method = 'SavitzkyGolay',
                                          halfWindowSize = 20L)
 
   # Perform baseline subtraction using the SNIP algorithm
