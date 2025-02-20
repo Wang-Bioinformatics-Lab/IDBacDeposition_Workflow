@@ -79,6 +79,7 @@ process depositSpectrum {
     file input_spectra_json
     file params_file
     file existing_names
+    val dummy
 
     """
     python $TOOL_FOLDER/deposit_spectra.py $input_spectra_json \
@@ -110,8 +111,6 @@ process baselineCorrection {
 
     conda "$TOOL_FOLDER/conda_maldiquant.yml"
 
-    errorStrategy 'ignore'
-
     input:
     file input_file 
 
@@ -134,6 +133,7 @@ process mergeInputSpectra {
 
     output:
     file 'merged/*.mzML'
+    val 1
 
     """
     mkdir merged
@@ -156,9 +156,7 @@ workflow {
 
     getExistingNames()
 
-    // Doing Deposition
     input_params_ch = Channel.fromPath(params.OMETAPARAM_YAML)
-    depositSpectrum(_spectra_json_ch, input_params_ch, getExistingNames.out.existing_names)
 
     // Now we will process the data like we did in analysis workflow by doing baseline normalization
 
@@ -167,5 +165,8 @@ workflow {
     baseline_query_spectra_ch = baselineCorrection(input_mzml_files_ch)
 
     // Doing merging of spectra
-    merged_spectra_ch = mergeInputSpectra(baseline_query_spectra_ch.collect())
+    (merged_spectra_ch, dummy) = mergeInputSpectra(baseline_query_spectra_ch.collect())
+    
+    // Doing Deposition
+    depositSpectrum(_spectra_json_ch, input_params_ch, getExistingNames.out.existing_names, dummy)
 }
