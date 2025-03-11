@@ -16,8 +16,16 @@ def load_data(input_filename):
         ms1_df, ms2_df = msql_fileloading.load_data(input_filename)
 
         return ms1_df, ms2_df
-    except:
+    except ValueError as e:
+        if "invalid literal for int() with base 10" in str(e):
+            print("Scan numbers could not be converted to integers. Falling back on default", file=sys.stderr)
+
+        else:
+            print("Error loading data, falling back on default")
+            print("Error:", e)
+    except Exception as e:
         print("Error loading data, falling back on default")
+        print("Error:", e)
 
     MS_precisions = {
         1: 5e-6,
@@ -43,6 +51,12 @@ def load_data(input_filename):
                 scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]
             except:
                 scan = spectrum["id"]
+
+            # try:
+            #     scan = int(scan)
+            # except:
+            #     print("Scan numbers could not be converted to integers", file=sys.stderr)
+            #     sys.exit(1)
 
             mz = spectrum["m/z array"]
             intensity = spectrum["intensity array"]
@@ -120,6 +134,7 @@ def main():
             spectra_binned_df = spectra_binned_df.drop(bins_to_remove, axis=1)
 
             # Now lets get the mean for each bin
+            spectra_binned_df.drop("scan", axis=1, inplace=True)    # Drop the can number in case it isn't numeric
             spectra_binned_df = spectra_binned_df.groupby("filename").mean().reset_index()
             spectra_binned_df["scan"] = "merged"
 
