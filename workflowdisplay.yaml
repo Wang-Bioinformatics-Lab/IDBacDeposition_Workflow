@@ -16,7 +16,15 @@ Views:
 #             return `
 #             <a target="_blank" href="/dashboards/lcms?usi=mzspec:GNPS2-${task}:${encodeURIComponent(row["filename"])}">View LCMS - mzspec:GNPS2-${task}:${row["filename"]}</a>
 #             `;}}]'
-            
+-   name: Visualize & QC Spectra
+    displayname: Visualize & QC Spectra
+    viewname: visualizeqc
+    displaytype: linkout
+    parameters:
+        baseurl: https://analysis.idbac.org/Deposition_QC/
+        urlparam:
+            -   task_id:[task]
+
 -   name: Metadata Preview
     displayname: Metadata Preview
     viewname: metadatashow
@@ -35,8 +43,8 @@ Views:
             <a target="_blank" href="https://metabolomics-usi.gnps2.org/dashinterface/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1">View Consensus - Resolver</a>
             <br>
             <a target="_blank" href="/dashboards/embedded/resolver/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1">View Consensus - Local</a>
-            <br>
-            <img src="https://metabolomics-usi.gnps2.org/png/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1" alt="Consensus Image" style="max-width: 500px;">
+            # <br>
+            # <img src="https://metabolomics-usi.gnps2.org/png/?usi1=mzspec:GNPS2:TASK-${task}-nf_output/merged/${row["Filename"]}:scan:1" alt="Consensus Image" style="max-width: 500px;">
         `;}}]'
 
 # -   name: Download Original Metadata
