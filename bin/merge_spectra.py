@@ -81,10 +81,28 @@ def main():
     parser.add_argument('output_folder')
     parser.add_argument('--merge_replicates', default="No")
     parser.add_argument('--bin_size', default=10.0, type=float)
+    parser.add_argument('--min_mz', type=str, default='0.0', help='Minimum m/z value to consider')
+    parser.add_argument('--max_mz', type=str, default='inf', help='Maximum m/z value to consider')
 
     args = parser.parse_args()
 
     bin_size = args.bin_size
+
+    
+    # Safely parse min, max m/z values
+    min_mz = args.min_mz.strip().replace(',', '')
+    max_mz = args.max_mz.strip().replace(',', '')
+    try:
+        min_mz = float(min_mz)
+    except Exception as e:
+        print(f"Error parsing min_mz '{args.min_mz}': {e}")
+        sys.exit(1)
+    try:
+        max_mz = float(max_mz)
+    except Exception as e:
+        print(f"Error parsing max_mz '{args.max_mz}': {e}")
+        sys.exit(1)
+
 
     # Lets read all the spectra that are coming out of the input_folder
     all_input_files = glob.glob(os.path.join(args.input_folder, "*.mzML"))
@@ -96,10 +114,8 @@ def main():
         print("Loading data from {}".format(input_filename))
         ms1_df, ms2_df = load_data(input_filename)
 
-        max_mz = 15000.0
-
         # Filtering m/z
-        ms1_df = ms1_df[ms1_df['mz'] < max_mz]
+        ms1_df = ms1_df[(ms1_df['mz'] >= min_mz) & (ms1_df['mz'] <= max_mz)]
 
         # Bin the MS1 Data by m/z within each spectrum
         ms1_df['bin'] = (ms1_df['mz'] / bin_size).astype(int)

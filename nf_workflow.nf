@@ -41,9 +41,11 @@ process processInputDataAndMetadata {
     max_mz_flag=""
     if [ ! -z "${params.min_mz}" ]; then
         min_mz_flag="--min_mz ${params.min_mz}"
+        echo "processInputDataAndMetadata() Using min_mz: ${params.min_mz}"
     fi
     if [ ! -z "${params.max_mz}" ]; then
         max_mz_flag="--max_mz ${params.max_mz}"
+        echo "processInputDataAndMetadata() Using max_mz: ${params.max_mz}"
     fi
 
     python $TOOL_FOLDER/processing_spectra.py $input_metadata $spectra output_spectra \$min_mz_flag \$max_mz_flag
@@ -152,10 +154,24 @@ process mergeInputSpectra {
 
     """
     mkdir merged
+
+    # Get min, max m/z values from params
+    min_mz_flag=""
+    max_mz_flag=""
+    if [ ! -z "${params.min_mz}" ]; then
+        min_mz_flag="--min_mz ${params.min_mz}"
+        echo "mergeInputSpectra() Using min_mz: ${params.min_mz}"
+    fi
+    if [ ! -z "${params.max_mz}" ]; then
+        max_mz_flag="--max_mz ${params.max_mz}"
+        echo "mergeInputSpectra() Using max_mz: ${params.max_mz}"
+    fi
+
     python $TOOL_FOLDER/merge_spectra.py \
     input_spectra \
     merged \
-    --merge_replicates ${params.merge_replicates}
+    --merge_replicates ${params.merge_replicates} \
+    \$min_mz_flag \$max_mz_flag
     """
 }
 
