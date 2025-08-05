@@ -1,7 +1,7 @@
 workflowname: idbacdeposition_workflow
 workflowdescription: idbacdeposition_workflow
 workflowlongdescription: Depositing Data for IDBac in GNPS2 - Please Use this template https://docs.google.com/spreadsheets/d/15uGa4FMuinlhmmP7G943iO8iqplIp9XYox6jdDuVKjg/edit#gid=0
-workflowversion: "0.2"
+workflowversion: "2025.05.08.00"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false
@@ -39,3 +39,18 @@ parameterlist:
           display: "Yes"
         - value: "No"
           display: "No"
+
+    - displayname: Minimum m/z value
+      paramtype: text
+      nf_paramname: min_mz
+      formplaceholder: ""
+      formvalue: ""
+      tooltip: "Minimum m/z value (inclusive), used to trim spectra. Generally not required but should be set for specific instruments/data."
+
+    - displayname: Maximum m/z value
+      paramtype: text
+      nf_paramname: max_mz
+      formplaceholder: ""
+      formvalue: ""
+      tooltip: "Maximum m/z value (inclusive), used to trim spectra. Generally not required but should be set for specific instruments/data."
+

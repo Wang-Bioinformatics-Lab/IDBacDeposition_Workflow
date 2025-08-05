@@ -1,6 +1,7 @@
 import sys
 import os
 import argparse
+import numpy as np
 import pandas as pd
 import uuid
 import json
@@ -125,6 +126,8 @@ def main():
     parser.add_argument('input_spectra_folder')
     parser.add_argument('output_folder')
     parser.add_argument('--output_identifier', default=str(uuid.uuid4()))
+    parser.add_argument('--min_mz', type=str, default='0.0', help='Minimum m/z value to consider')
+    parser.add_argument('--max_mz', type=str, default='inf', help='Maximum m/z value to consider')
 
     args = parser.parse_args()
 
@@ -152,6 +155,21 @@ def main():
 
     # TODO: We should limit the column names
     columns_possible = ["Filename", "Scan/Coordinate", "Strain name"]
+
+    # Safely parse min, max m/z values
+    min_mz = args.min_mz.strip().replace(',', '')
+    max_mz = args.max_mz.strip().replace(',', '')
+    try:
+        min_mz = float(min_mz)
+    except Exception as e:
+        print(f"Error parsing min_mz '{args.min_mz}': {e}")
+        sys.exit(1)
+    try:
+        max_mz = float(max_mz)
+    except Exception as e:
+        print(f"Error parsing max_mz '{args.max_mz}': {e}")
+        sys.exit(1)
+
 
     for record in all_rows:
         # checking if file is NaN
@@ -181,6 +199,8 @@ def main():
             for scan, scan_df in scan_groups:
                 peaks_list = scan_df.to_dict('records')
                 peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
+                # Filtering by m/z range
+                peaks_list = [peak for peak in peaks_list if min_mz <= peak[0] <= max_mz]
 
                 print("SCAN and length of peaks", scan, len(peaks_list))
 
@@ -191,6 +211,8 @@ def main():
             peaks_df = ms1_df[ms1_df["scan"] == scan_or_coord]
             peaks_list = peaks_df.to_dict('records')
             peaks_list = [[peak["mz"], peak["i"]] for peak in peaks_list]
+            # Filtering by m/z range
+            peaks_list = [peak for peak in peaks_list if min_mz <= peak[0] <= max_mz]
 
             spectra_list.append(peaks_list)
 

@@ -15,6 +15,10 @@ params.OMETAPARAM_YAML = "job_parameters.yaml"
 
 params.idbac_url = "idbac.org"
 
+// Min/Max m/z values for processing
+params.min_mz = ""
+params.max_mz = ""
+
 TOOL_FOLDER = "$baseDir/bin"
 
 process processInputDataAndMetadata {
@@ -30,8 +34,19 @@ process processInputDataAndMetadata {
     file 'output_spectra'
 
     """
-    mkdir output_spectra
-    python $TOOL_FOLDER/processing_spectra.py $input_metadata $spectra output_spectra
+    if [ ! -d "output_spectra" ]; then
+        mkdir output_spectra
+    fi
+    min_mz_flag=""
+    max_mz_flag=""
+    if [ ! -z "${params.min_mz}" ]; then
+        min_mz_flag="--min_mz ${params.min_mz}"
+    fi
+    if [ ! -z "${params.max_mz}" ]; then
+        max_mz_flag="--max_mz ${params.max_mz}"
+    fi
+
+    python $TOOL_FOLDER/processing_spectra.py $input_metadata $spectra output_spectra \$min_mz_flag \$max_mz_flag
     """
 }
 
