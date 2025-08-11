@@ -1,7 +1,7 @@
 workflowname: idbacdeposition_workflow
 workflowdescription: idbacdeposition_workflow
-workflowlongdescription: Depositing Data for IDBac in GNPS2 - Please Use this template https://docs.google.com/spreadsheets/d/15uGa4FMuinlhmmP7G943iO8iqplIp9XYox6jdDuVKjg/edit#gid=0
-workflowversion: "2025.05.08.00"
+workflowlongdescription: Depositing Data for IDBac in GNPS2 - Please Use this template https://docs.google.com/spreadsheets/d/1yKsZ2FEw8-cWufvY8l31Ju8NTKujmEtb/edit?usp=sharing&ouid=102573514213912402103&rtpof=true&sd=true
+workflowversion: "2025.08.11.00"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false
