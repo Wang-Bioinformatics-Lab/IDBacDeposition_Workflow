@@ -1,7 +1,7 @@
 workflowname: idbacdeposition_workflow
-workflowdescription: idbacdeposition_workflow
-workflowlongdescription: Depositing Data for IDBac in GNPS2 - Please Use this template https://docs.google.com/spreadsheets/d/1yKsZ2FEw8-cWufvY8l31Ju8NTKujmEtb/edit?usp=sharing&ouid=102573514213912402103&rtpof=true&sd=true
-workflowversion: "2025.08.11.00"
+workflowdescription: IDBac KB Deposition Workflow
+workflowlongdescription: Welcome to the IDBac Deposition Workflow! This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase. ⚠️ Please perform quality control (QC) on your data before disabling "Dry-Run" mode. ⚠️ Once deposited, data cannot be updated or removed without contacting the database administrator. For more information on depositions, documentation is available at https://wang-bioinformatics-lab.github.io/GNPS2_Documentation/idbacdepositions/
+workflowversion: "2025.09.22.00"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false
@@ -10,20 +10,20 @@ parameterlist:
     - displayname: File Selection
       paramtype: section
 
-    - displayname: Input Metadata File
+    - displayname: Input Metadata File (.xlsx or .csv)
       paramtype: fileselector
       nf_paramname: input_metadata
-      formplaceholder: Enter the path to data
+      formplaceholder: Enter the path to the input metadata file.
       formvalue: ""
       targettaskfolder: input_metadata
       optional: false
       selectsinglefile: true
       folderunroll: true
 
-    - displayname: Input Spectra Folder
+    - displayname: Input mzML Files for Protein MALDI Spectra
       paramtype: fileselector
       nf_paramname: input_spectra_folder
-      formplaceholder: Enter the path to data
+      formplaceholder: Input mzML files for protein MALDI spectra
       formvalue: ""
       targettaskfolder: input_spectra_folder
       optional: false
@@ -39,6 +39,7 @@ parameterlist:
           display: "Yes"
         - value: "No"
           display: "No"
+      tooltip: "Dry run mode will enable you to view the processed spectra without depositing to the IDBac Knowledge Base. This is recommended for quality control before final submission."
 
     - displayname: Minimum m/z value
       paramtype: text
