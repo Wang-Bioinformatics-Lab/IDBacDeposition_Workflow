@@ -1,7 +1,6 @@
 import sys
 import os
 import argparse
-import numpy as np
 import pandas as pd
 import uuid
 import json
@@ -38,9 +37,9 @@ def load_data(input_filename):
     with mzml.read(input_filename) as reader:
         for spectrum in tqdm(reader):
             try:
-                scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]
+                scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]+f"_{spectrum['index']}"
             except:
-                scan = spectrum["id"]
+                scan = spectrum["id"] + str(spectrum['index'])
 
             mz = spectrum["m/z array"]
             intensity = spectrum["intensity array"]
@@ -205,6 +204,8 @@ def main():
                 print("SCAN and length of peaks", scan, len(peaks_list))
 
                 spectra_list.append(peaks_list)
+
+            print(f"Fetched a total of {len(spectra_list)} scans")
         else:
             print("Grabbing {} scans".format(scan_or_coord))
 

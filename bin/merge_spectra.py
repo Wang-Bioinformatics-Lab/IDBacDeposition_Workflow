@@ -2,8 +2,6 @@ import sys
 import os
 import argparse
 import pandas as pd
-import uuid
-import json
 from massql import msql_fileloading
 from pyteomics import mzxml, mzml
 from psims.mzml.writer import MzMLWriter
@@ -48,9 +46,9 @@ def load_data(input_filename):
     with mzml.read(input_filename) as reader:
         for spectrum in tqdm(reader):
             try:
-                scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]
+                scan = spectrum["id"].replace("scanId=", "").split("scan=")[-1]+f"_{spectrum['index']}"
             except:
-                scan = spectrum["id"]
+                scan = spectrum["id"] + str(spectrum['index'])
 
             # try:
             #     scan = int(scan)

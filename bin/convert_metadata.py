@@ -1,11 +1,5 @@
-import sys
-import os
 import argparse
 import pandas as pd
-import uuid
-import json
-from massql import msql_fileloading
-
 
 def load_metadata_file(metadata_path:str):
     """
