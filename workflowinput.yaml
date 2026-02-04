@@ -1,7 +1,7 @@
 workflowname: idbacdeposition_workflow
 workflowdescription: IDBac KB Deposition Workflow
-workflowlongdescription: Welcome to the IDBac Deposition Workflow! This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase. ⚠️ Please perform quality control (QC) on your data before disabling "Dry-Run" mode. ⚠️ Once deposited, data cannot be updated or removed without contacting the administrator. For more information on depositions, documentation is available at https://wang-bioinformatics-lab.github.io/GNPS2_Documentation/idbacdepositions/
-workflowversion: "2025.09.26.00"
+workflowlongdescription: Welcome to the IDBac Deposition Workflow! This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase. ⚠️ Please perform quality control (QC) on your data before disabling "Dry-Run" mode. ⚠️ Once deposited, data cannot be updated or removed without contacting the administrator. For more information on depositions, documentation is available at https://wang-bioinformatics-lab.github.io/GNPS2_Documentation/idbacdepositions/. All depositions are licensed as CC-BY-NC 4.0.
+workflowversion: "2026.02.03.00"
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false

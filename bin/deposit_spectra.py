@@ -17,7 +17,7 @@ def _validate_entry(spectrum_obj, existing_names):
                     "Cultivation media", "Cultivation temp", "Cultivation time", "Isolation media", "PI",
                     "MS Collected by", "Isolate Collected by", "Sample Collected by",
                     "Sample name", "Isolate Source", "Source Location Name", "Longitude",
-                    "Latitude", "Altitude", "Collection Temperature", "MALDI instrument", "Comment"]
+                    "Latitude", "Altitude", "Collection Temperature", "MALDI instrument", "Comment", "License", "Data Source"]
     
     required_fields = ["spectrum", "Strain name", "Filename", "MALDI matrix name", "MALDI prep",
                     "Cultivation media", "Cultivation temp", "Cultivation time", "PI"]
