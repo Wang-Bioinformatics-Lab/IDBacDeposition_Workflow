@@ -21,6 +21,45 @@ params.max_mz = ""
 
 TOOL_FOLDER = "$baseDir/bin"
 
+process qc_spectra {
+    cpus 2
+    memory '8 GB'
+
+    conda "$TOOL_FOLDER/conda_env.yml"
+
+    input:
+    file input_spectra_file
+
+    output:
+    file 'single_file_qc_report.tsv'
+
+    """
+    python $TOOL_FOLDER/qc_protein_spectra.py \
+    --input_spectra $input_spectra_file \
+    --output_path single_file_qc_report.tsv
+    """
+}
+
+process merge_qc_tsv {
+    publishDir "./nf_output/qc", mode: 'copy'
+
+    cpus 2
+
+    memory '8 GB'
+
+    input:
+    path tsv_files, stageAs: "qc_reports/*.tsv"
+
+    output:
+    path "combined_output.tsv"
+
+    script:
+    """
+    # Keep the header from the first file, then append others skipping their headers
+    awk 'FNR==1 && NR!=1{next;}{print}' ${tsv_files} > combined_output.tsv
+    """
+}
+
 process processInputDataAndMetadata {
     publishDir "./nf_output", mode: 'copy'
 
@@ -178,7 +217,16 @@ process mergeInputSpectra {
 
 workflow {
     input_metadata_ch = Channel.fromPath(params.input_metadata)
-    input_spectra_ch = Channel.fromPath(params.input_spectra_folder)
+    input_spectra_ch = Channel.fromPath(params.input_spectra_folder + "/*.mzML")
+
+    // Perform protein-specific QC
+    qc_reports = qc_spectra(
+        input_spectra_ch,
+    )
+    // Merge QC reports into a single file for easier review
+    merge_qc_tsv(
+        qc_reports.collect()
+    )
 
     showMetadata(input_metadata_ch)
 
