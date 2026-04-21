@@ -218,6 +218,7 @@ process mergeInputSpectra {
 workflow {
     input_metadata_ch = Channel.fromPath(params.input_metadata)
     input_spectra_ch = Channel.fromPath(params.input_spectra_folder + "/*.mzML")
+    input_spectra_folder_ch = Channel.fromPath(params.input_spectra_folder)
 
     // Perform protein-specific QC
     qc_reports = qc_spectra(
@@ -231,7 +232,7 @@ workflow {
     showMetadata(input_metadata_ch)
 
     // Processing data
-    _spectra_json_ch = processInputDataAndMetadata(input_metadata_ch, input_spectra_ch)
+    _spectra_json_ch = processInputDataAndMetadata(input_metadata_ch, input_spectra_folder_ch)
 
     getExistingNames()
 

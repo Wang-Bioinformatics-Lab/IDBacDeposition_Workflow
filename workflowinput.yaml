@@ -1,7 +1,15 @@
 workflowname: idbacdeposition_workflow
 workflowdescription: IDBac KB Deposition Workflow
-workflowlongdescription: Welcome to the IDBac Deposition Workflow! This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase. ⚠️ Please perform quality control (QC) on your data before disabling "Dry-Run" mode. ⚠️ Once deposited, data cannot be updated or removed without contacting the administrator. For more information on depositions, documentation is available at https://wang-bioinformatics-lab.github.io/GNPS2_Documentation/idbacdepositions/. All depositions are licensed as CC-BY-NC 4.0.
-workflowversion: "2026.02.05.00"
+# workflowlongdescription: Welcome to the IDBac Deposition Workflow! This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase. ⚠️ Please perform quality control (QC) on your data before disabling "Dry-Run" mode. ⚠️ Once deposited, data cannot be updated or removed without contacting the administrator. For more information on depositions, documentation is available at https://wang-bioinformatics-lab.github.io/GNPS2_Documentation/idbacdepositions/. All depositions are licensed as CC-BY-NC 4.0.
+workflowlongdescription: |
+  <p>Welcome to the IDBac Deposition Workflow. This workflow processes MALDI MS data from genetically verified bacterial isolates into a format suitable for deposition into the IDBac Knowledgebase.</p>
+  <p><strong>Before depositing data:</strong></p>
+  <ul>
+    <li>⚠️ Please perform quality control on your data before disabling Dry-Run mode.</li>
+    <li>⚠️ Once deposited, data cannot be updated or removed without contacting the administrator.</li>
+    <li>For more information on depositions and documentation, visit <a href="https://sites.google.com/uic.edu/idbac-documentation/contribute-to-the-kb" target="_blank" title="IDBac Knowledgebase contribution guide">the IDBac Knowledgebase contribution guide</a>.</li>
+  </ul>
+  <p>All depositions are licensed under CC-BY-NC 4.0.</p>
 workflowfile: nf_workflow.nf
 workflowautohide: false
 adminonly: false
