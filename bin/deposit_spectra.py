@@ -68,6 +68,7 @@ def main():
         all_strain_names = []
         for spectrum_obj in spectra_list:
             if not "spectrum" in spectrum_obj:
+                print("Missing spectrum field, skipping", spectrum_obj)
                 continue
     
             # Validate them ahead of time
